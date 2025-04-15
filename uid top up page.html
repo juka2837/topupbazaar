@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TopUpBazaar - Free Fire Top-Up</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #4B0082;
+      color: white;
+    }
+    header {
+      background-color: #310062;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #FFD700;
+    }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background-color: #2E0854;
+      padding: 20px;
+      border-radius: 12px;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #FFD700;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: #FFA500;
+    }
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 15px;
+      margin-top: 15px;
+    }
+    .package {
+      background-color: #3c0d65;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      border: 1px solid #6A0DAD;
+      cursor: pointer;
+    }
+    .package:hover {
+      background-color: #550080;
+    }
+    .selected {
+      border: 2px solid #FFD700;
+      background-color: #5a0ea0;
+    }
+    .message {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .success {
+      background-color: #28a745;
+      color: white;
+    }
+    .error {
+      background-color: #dc3545;
+      color: white;
+    }
+    .payment-info {
+      margin: 20px 0;
+      background-color: #3c0d65;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    .payment-info p {
+      margin: 5px 0;
+    }
+    footer {
+      text-align: center;
+      padding: 15px;
+      background-color: #2e064c;
+      color: #ccc;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TopUpBazaar</h1>
+    <p>Fast & Secure Free Fire Diamond Top-Up</p>
+  </header>
+
+  <div class="container">
+    <div class="payment-info">
+      <p><strong>Send Payment via bKash</strong></p>
+      <p>bKash Number: <strong>01XXXXXXXXX</strong></p>
+      <p>Payment Type: <strong>Send Money</strong></p>
+    </div>
+
+    <form id="topup-form">
+      <label for="uid">Enter Your Free Fire UID:</label>
+      <input type="text" id="uid" placeholder="e.g. 123456789" required />
+
+      <input type="hidden" id="payment" value="bkash" />
+
+      <label for="txid">Transaction ID:</label>
+      <input type="text" id="txid" placeholder="e.g. TX123456789" required />
+
+      <label>Select Diamond Package:</label>
+      <div class="package-grid" id="package-grid">
+        <div class="package">115💎 = 90৳</div>
+        <div class="package">240💎 = 175৳</div>
+        <div class="package">355💎 = 260৳</div>
+        <div class="package">405💎 = 295৳</div>
+        <div class="package">480💎 = 335৳</div>
+        <div class="package">505💎 = 370৳</div>
+        <div class="package">610💎 = 410৳</div>
+        <div class="package">1015💎 = 710৳</div>
+        <div class="package">1090💎 = 735৳</div>
+        <div class="package">1240💎 = 815৳</div>
+        <div class="package">2015💎 = 1350৳</div>
+        <div class="package">2090💎 = 1370৳</div>
+        <div class="package">2530💎 = 1629৳</div>
+        <div class="package">4010💎 = 2650৳</div>
+      </div>
+
+      <button type="submit">Confirm Top-Up</button>
+      <div id="message"></div>
+    </form>
+  </div>
+
+  <footer>
+    &copy; 2025 TopUpBazaar | All Rights Reserved
+  </footer>
+
+  <script>
+    const packages = document.querySelectorAll('.package');
+    let selectedPackage = null;
+
+    packages.forEach(pkg => {
+      pkg.addEventListener('click', () => {
+        packages.forEach(p => p.classList.remove('selected'));
+        pkg.classList.add('selected');
+        selectedPackage = pkg.innerText;
+      });
+    });
+
+    document.getElementById('topup-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const uid = document.getElementById('uid').value.trim();
+      const payment = document.getElementById('payment').value;
+      const txid = document.getElementById('txid').value.trim();
+      const messageDiv = document.getElementById('message');
+
+      if (!selectedPackage) {
+        messageDiv.className = 'message error';
+        messageDiv.innerText = 'Please select a diamond package.';
+        return;
+      }
+
+      if (uid && payment && txid) {
+        messageDiv.className = 'message success';
+        messageDiv.innerText = '✅ Order Confirmed! We will process your top-up shortly.';
+        this.reset();
+        packages.forEach(p => p.classList.remove('selected'));
+        selectedPackage = null;
+      } else {
+        messageDiv.className = 'message error';
+        messageDiv.innerText = '❌ Payment Failed! Please fill all fields correctly.';
+      }
+    });
+  </script>
+</body>
+</html>
